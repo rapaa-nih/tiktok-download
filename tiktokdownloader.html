@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>TikTok Downloader No Watermark</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            background: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #00ff99;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        video {
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 10px;
+        }
+
+        a {
+            display: block;
+            margin-top: 10px;
+            color: #00ff99;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>TikTok Downloader</h2>
+    <input id="url" type="text" placeholder="Paste link TikTok">
+    <button onclick="download()">Download</button>
+
+    <video id="video" controls></video>
+    <a id="downloadLink" href="" download hidden>Download Video</a>
+</div>
+
+<script>
+async function download() {
+    const url = document.getElementById("url").value;
+    if (!url) return alert("Masukkan link TikTok!");
+
+    const api = `https://tikwm.com/api/?url=${encodeURIComponent(url)}`;
+
+    try {
+        const res = await fetch(api);
+        const data = await res.json();
+
+        if (!data.data) {
+            alert("Video tidak ditemukan!");
+            return;
+        }
+
+        const videoUrl = data.data.play; // tanpa watermark
+
+        const video = document.getElementById("video");
+        const link = document.getElementById("downloadLink");
+
+        video.src = videoUrl;
+        link.href = videoUrl;
+        link.hidden = false;
+        link.innerText = "⬇ Download Video Tanpa Watermark";
+
+    } catch (err) {
+        alert("Gagal mengambil video");
+        console.error(err);
+    }
+}
+</script>
+
+</body>
+</html>
